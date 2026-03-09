@@ -1,6 +1,8 @@
 ---
 name: zotero-pdf-upload
 description: Upload PDFs and manage items in a Zotero Web Library. Supports both personal and group libraries. Use when a user wants to add papers/PDFs to Zotero, organize collections, or manage their Zotero library through the API.
+primaryEnv: ZOTERO_API_KEY
+requiredConfig: config.json
 ---
 # zotero-pdf-upload
 
@@ -59,6 +61,12 @@ Load Zotero API key in this order (safe default):
 3. Inline config value: `zotero.apiKey` (least preferred)
 
 Never print full API keys in output.
+
+Security note: when resolving a personal library URL (username-based, no numeric ID),
+the skill calls `GET https://api.zotero.org/keys/{apiKey}` to look up the userID.
+This is the standard Zotero API pattern — the key appears in the URL and may be
+visible in server access logs. Use a least-privilege key and prefer env/file loading
+over inline config.
 
 ## Core commands
 
