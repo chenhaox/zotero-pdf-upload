@@ -1,58 +1,90 @@
-# zotero-pdf-upload
+# 📎 zotero-pdf-upload
 
-Standalone skill for practical Zotero operations.
+> Standalone skill for practical Zotero operations — upload PDFs, manage collections, and create items via the Zotero Web API.
 
-## What it does
-
-- Parse Zotero group/user URLs into `libraryType` + `libraryId`
-- List and inspect existing collections
-- Heuristically match an item to an existing collection
-- Require explicit approval before creating collections/items
-- Create Zotero item metadata
-- Optionally upload/attach a PDF when enabled
-- Load API key safely from env/path/config precedence
-
-## Main scripts
-
-- `scripts/zotero_workflow.py` — CLI entrypoint
-- `scripts/zotero_client.py` — Zotero API client/utilities
-- `tests/smoke_test_zotero_pdf_upload.py` — no-network smoke tests
-
-## Quick start
-
-1. Copy `references/config.example.json` to a local runtime file and fill values.
-2. Export API key (recommended):
+## ⚡ Quick Setup (one-liner)
 
 ```bash
-export ZOTERO_API_KEY='...'
+# 1️⃣  Set your Zotero API key (get one at https://www.zotero.org/settings/keys)
+export ZOTERO_API_KEY='your-api-key-here'
+
+# 2️⃣  Generate config from your Zotero library URL
+python scripts/setup.py "https://www.zotero.org/groups/123456/my-group/library"
+
+# ✅ Done! Try listing your collections:
+python scripts/zotero_workflow.py list-collections --config config.json
 ```
 
-3. Parse URL:
+Personal library? Just use your personal URL instead:
 
 ```bash
-python scripts/zotero_workflow.py parse-url --url "https://www.zotero.org/groups/6320165/my-group/library"
+python scripts/setup.py "https://www.zotero.org/myusername/library"
 ```
 
-4. List collections (read-only):
+---
+
+## 🔧 What it does
+
+- 🔗 Parse Zotero group/user URLs into `libraryType` + `libraryId`
+- 📂 List and inspect existing collections
+- 🎯 Heuristically match an item to an existing collection
+- ✋ Require explicit approval before creating collections/items
+- 📝 Create Zotero item metadata
+- 📤 Optionally upload/attach a PDF when enabled
+- 🔐 Load API key safely from env/path/config precedence
+
+## 📁 Main scripts
+
+| Script | Description |
+|--------|-------------|
+| `scripts/setup.py` | ⚡ One-line config generator |
+| `scripts/zotero_workflow.py` | 🚀 CLI entrypoint |
+| `scripts/zotero_client.py` | 🔌 Zotero API client/utilities |
+| `tests/smoke_test_zotero_pdf_upload.py` | 🧪 No-network smoke tests |
+
+## 📖 Detailed Usage
+
+### 1️⃣ Parse URL
 
 ```bash
-python scripts/zotero_workflow.py list-collections --config ./tmp.config.json
+python scripts/zotero_workflow.py parse-url --url "https://www.zotero.org/groups/123456/my-group/library"
 ```
 
-5. Choose collection (read-only):
+### 2️⃣ List collections (read-only)
 
 ```bash
-python scripts/zotero_workflow.py choose-collection --config ./tmp.config.json --item-json references/item.example.json
+python scripts/zotero_workflow.py list-collections --config config.json
 ```
 
-6. Create collection (explicit write):
+### 3️⃣ Choose collection (read-only)
 
 ```bash
-python scripts/zotero_workflow.py create-collection --config ./tmp.config.json --name "LLM Safety" --approve-create
+python scripts/zotero_workflow.py choose-collection --config config.json --item-json references/item.example.json
 ```
 
-7. Create item (explicit write):
+### 4️⃣ Create collection (explicit write)
 
 ```bash
-python scripts/zotero_workflow.py create-item --config ./tmp.config.json --item-json references/item.example.json --auto-match-collection --approve-write
+python scripts/zotero_workflow.py create-collection --config config.json --name "LLM Safety" --approve-create
 ```
+
+### 5️⃣ Create item + attach PDF (explicit write)
+
+```bash
+python scripts/zotero_workflow.py create-item \
+  --config config.json \
+  --item-json references/item.example.json \
+  --auto-match-collection \
+  --attach-pdf /path/to/paper.pdf \
+  --approve-write
+```
+
+## 🧪 Tests
+
+```bash
+python tests/smoke_test_zotero_pdf_upload.py
+```
+
+## 📄 License
+
+MIT

@@ -7,4 +7,5 @@ __pycache__/
 # Local runtime files
 *.local.json
 tmp*.json
+config.json
 
