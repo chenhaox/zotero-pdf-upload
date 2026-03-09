@@ -1,0 +1,14 @@
+# Root-level ignores
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.swp
+*.pdf
+
+# Local runtime / temp files
+*.local.json
+tmp*.json
+
+# Tests (not published)
+tests/
