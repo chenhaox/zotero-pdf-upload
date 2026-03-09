@@ -2,10 +2,36 @@
 name: zotero-pdf-upload
 description: Standalone Zotero operations: parse Zotero group or personal library URLs, inspect collections, heuristically match items to existing collections, explicitly create collections only after approval, create Zotero item metadata, and optionally upload PDF attachments with safe API-key loading from env/path/config. Supports both group URLs (e.g. /groups/123/name/library) and personal URLs (e.g. /username/library). Use when a user asks to work directly with Zotero libraries, collections, items, or uploads.
 ---
-
 # zotero-pdf-upload
 
 Use this skill for direct Zotero workflows that must stay safe, explicit, and reusable.
+
+## ⚠️ First-time setup check (do this BEFORE any Zotero operation)
+
+Before running any command, check if `config.json` exists in the skill root directory.
+
+**If `config.json` does NOT exist**, stop and inform the user:
+
+> 🚫 This skill is not configured yet. You need to set it up first.
+>
+> **What you need to prepare:**
+>
+> 1. **Zotero API Key** — Create one at [zotero.org/settings/keys](https://www.zotero.org/settings/keys)
+>    - Go to Settings → Security → Create new private key
+>    - Enable: ✅ Allow library access, ✅ Allow notes access, ✅ Allow write access
+>    - If using group libraries, set Default Group Permissions to **Read/Write**
+>    - Click "Save Key" and copy the generated key
+>
+> 2. **Zotero Library URL** — Open your library in a browser and copy the URL:
+>    - Personal: `https://www.zotero.org/<your-username>/library`
+>    - Group: `https://www.zotero.org/groups/<group-id>/<group-name>/library`
+>
+> **Run this one-line setup command** from the skill directory:
+> ```bash
+> python scripts/setup.py "<YOUR_LIBRARY_URL>" "<YOUR_API_KEY>"
+> ```
+
+Do NOT proceed with any Zotero operations until `config.json` has been created.
 
 ## Included resources
 

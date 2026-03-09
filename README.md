@@ -1,25 +1,57 @@
 # 📎 zotero-pdf-upload
 
-> Standalone skill for practical Zotero operations — upload PDFs, manage collections, and create items via the Zotero Web API.
+[中文版](README_CN.md) | [GitHub](https://github.com/chenhaox/zotero-pdf-upload)
 
-## ⚡ Quick Setup (one-liner)
+> 🤖 AI Skill — Let your LLM manage your [Zotero Web Library](https://www.zotero.org) directly: upload PDFs, create items, and match collections.
 
-```bash
-# 1️⃣  Set your Zotero API key (get one at https://www.zotero.org/settings/keys)
-export ZOTERO_API_KEY='your-api-key-here'
+## ⚙️ Configure
 
-# 2️⃣  Generate config from your Zotero library URL
-python scripts/setup.py "https://www.zotero.org/groups/123456/my-group/library"
+You need two things: a **Zotero API Key** and your **Zotero Library URL**.
 
-# ✅ Done! Try listing your collections:
-python scripts/zotero_workflow.py list-collections --config config.json
+### Step 1 — Create a Zotero API Key
+
+1. Log in to [zotero.org](https://www.zotero.org) and click **"Settings"** in the top-right corner.
+
+   ![Step 1: Click Settings](images/step1.jpg)
+
+2. In the Settings page, click **"Security"** in the left sidebar, then scroll down to the **Applications** section and click **"Create new private key"**.
+
+   ![Step 2: Click Security → Create new private key](images/step2.jpg)
+
+3. Configure the key permissions:
+   - **Personal Library**: ✅ Allow library access, ✅ Allow notes access, ✅ Allow write access
+   - **Default Group Permissions**: Set to **Read/Write** (if you use group libraries)
+   - Click **"Save Key"** to generate your `Zotero_API_Key`
+
+   ![Step 3: Configure permissions and save key](images/step3.jpg)
+
+4. **Copy the generated key** — you'll need it below.
+
+### Step 2 — Get your Zotero Library URL
+
+Open your Zotero library in a browser and copy the URL from the address bar:
+
+- **Personal library**: `https://www.zotero.org/<your-username>/library`
+- **Group library**: `https://www.zotero.org/groups/<group-id>/<group-name>/library`
+
+For example:
+```
+# Personal
+https://www.zotero.org/chenhaox/library
+
+# Group
+https://www.zotero.org/groups/6320165/fafu_robot/library
 ```
 
-Personal library? Just use your personal URL instead:
+### Step 3 — Run setup
 
 ```bash
-python scripts/setup.py "https://www.zotero.org/myusername/library"
+python scripts/setup.py "<YOUR_LIBRARY_URL>" "<YOUR_API_KEY>"
 ```
+
+✅ **Done!** Restart your conversation and the LLM will automatically detect and use this skill.
+
+> 💡 Just tell the AI: _"Upload this PDF to my Zotero collection X"_ — it will handle the rest.
 
 ---
 
@@ -33,7 +65,11 @@ python scripts/setup.py "https://www.zotero.org/myusername/library"
 - 📤 Optionally upload/attach a PDF when enabled
 - 🔐 Load API key safely from env/path/config precedence
 
-## 📁 Main scripts
+---
+
+## 🛠 For Advanced Users
+
+### 📁 Main scripts
 
 | Script | Description |
 |--------|-------------|
@@ -42,33 +78,33 @@ python scripts/setup.py "https://www.zotero.org/myusername/library"
 | `scripts/zotero_client.py` | 🔌 Zotero API client/utilities |
 | `tests/smoke_test_zotero_pdf_upload.py` | 🧪 No-network smoke tests |
 
-## 📖 Detailed Usage
+### 📖 Detailed Usage
 
-### 1️⃣ Parse URL
+#### 1️⃣ Parse URL
 
 ```bash
 python scripts/zotero_workflow.py parse-url --url "https://www.zotero.org/groups/123456/my-group/library"
 ```
 
-### 2️⃣ List collections (read-only)
+#### 2️⃣ List collections (read-only)
 
 ```bash
 python scripts/zotero_workflow.py list-collections --config config.json
 ```
 
-### 3️⃣ Choose collection (read-only)
+#### 3️⃣ Choose collection (read-only)
 
 ```bash
 python scripts/zotero_workflow.py choose-collection --config config.json --item-json references/item.example.json
 ```
 
-### 4️⃣ Create collection (explicit write)
+#### 4️⃣ Create collection (explicit write)
 
 ```bash
 python scripts/zotero_workflow.py create-collection --config config.json --name "LLM Safety" --approve-create
 ```
 
-### 5️⃣ Create item + attach PDF (explicit write)
+#### 5️⃣ Create item + attach PDF (explicit write)
 
 ```bash
 python scripts/zotero_workflow.py create-item \
@@ -79,7 +115,7 @@ python scripts/zotero_workflow.py create-item \
   --approve-write
 ```
 
-## 🧪 Tests
+### 🧪 Tests
 
 ```bash
 python tests/smoke_test_zotero_pdf_upload.py

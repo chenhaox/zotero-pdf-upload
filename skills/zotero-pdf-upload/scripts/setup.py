@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""One-line setup: generate runtime config from a Zotero URL.
+"""One-line setup: generate runtime config from a Zotero URL and API key.
 
 Usage:
-    python scripts/setup.py "https://www.zotero.org/groups/123456/my-group/library"
+    python scripts/setup.py <ZOTERO_LIBRARY_URL> <ZOTERO_API_KEY>
 
 This creates a ready-to-use config file (config.json) in the skill root.
-The Zotero API key is read from the ZOTERO_API_KEY environment variable at runtime.
 """
 
 import json
@@ -29,24 +28,26 @@ TEMPLATE = {
 
 
 def main() -> int:
-    if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help"):
-        print("Usage: python scripts/setup.py <ZOTERO_LIBRARY_URL>")
+    if len(sys.argv) < 3 or sys.argv[1] in ("-h", "--help"):
+        print("Usage: python scripts/setup.py <ZOTERO_LIBRARY_URL> <ZOTERO_API_KEY>")
         print()
         print("Example:")
-        print('  python scripts/setup.py "https://www.zotero.org/groups/123456/my-group/library"')
-        print('  python scripts/setup.py "https://www.zotero.org/myusername/library"')
-        print()
-        print("Then set your API key:")
-        print("  export ZOTERO_API_KEY='your-key-here'")
+        print('  python scripts/setup.py "https://www.zotero.org/groups/123456/my-group/library" "your-api-key"')
+        print('  python scripts/setup.py "https://www.zotero.org/myusername/library" "your-api-key"')
         return 0
 
     url = sys.argv[1].strip()
+    api_key = sys.argv[2].strip()
+
     if not url:
         print("Error: URL cannot be empty.")
         return 1
+    if not api_key:
+        print("Error: API key cannot be empty.")
+        return 1
 
     config = TEMPLATE.copy()
-    config["zotero"] = {**TEMPLATE["zotero"], "url": url}
+    config["zotero"] = {**TEMPLATE["zotero"], "url": url, "apiKey": api_key}
 
     if CONFIG_PATH.exists():
         print(f"⚠️  Config already exists at {CONFIG_PATH}")
@@ -58,10 +59,7 @@ def main() -> int:
     CONFIG_PATH.write_text(json.dumps(config, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"✅ Config written to {CONFIG_PATH}")
     print()
-    print("Next step — set your Zotero API key:")
-    print("  export ZOTERO_API_KEY='your-key-here'")
-    print()
-    print("Then try:")
+    print("Done! Try listing your collections:")
     print(f'  python scripts/zotero_workflow.py list-collections --config {CONFIG_PATH}')
     return 0
 
