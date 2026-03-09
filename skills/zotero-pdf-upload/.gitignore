@@ -8,5 +8,3 @@ __pycache__/
 *.local.json
 tmp*.json
 
-# Tests
-tests/

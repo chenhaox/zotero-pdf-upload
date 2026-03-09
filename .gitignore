@@ -10,5 +10,3 @@ __pycache__/
 *.local.json
 tmp*.json
 
-# Tests (not published)
-tests/
